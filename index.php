@@ -33,7 +33,7 @@
         
         <div class="chat-container">
           <header class="app-header">
-            <h1 class="app-title">WeFed</h1>
+            <a href="index.html" style="text-decoration: none; color: white"><h1 class="app-title">WeFed</h1></a>
             <div class="app-actions">
            <button class="app-action-button" onclick="showSettings()">Settings</button>
               <button class="app-action-button" onclick="showProfile()">Profile</button>
@@ -67,7 +67,7 @@
         <!-- Settings page -->
         <div class="settings-container" style="display: none;">
           <header class="app-header">
-            <h1 class="app-title">WeFed</h1>
+            <a href="index.html" style="text-decoration: none; color: white"><h1 class="app-title">WeFed</h1></a>
             <div class="app-actions">
            <button class="app-action-button" onclick="showSettings()">Settings</button>
               <button class="app-action-button" onclick="showProfile()">Profile</button>
@@ -98,7 +98,7 @@
         <!-- Profile page -->
         <div class="profile-container" style="display: none;">
           <header class="app-header">
-            <h1 class="app-title">WeFed</h1>
+            <a href="index.html" style="text-decoration: none; color: white"><h1 class="app-title">WeFed</h1></a>
             <div class="app-actions">
            <button class="app-action-button" onclick="showSettings()">Settings</button>
               <button class="app-action-button" onclick="showProfile()">Profile</button>
