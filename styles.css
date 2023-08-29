@@ -69,6 +69,7 @@ body {
 
   .chat-container {
     max-width: 95vw;
+    padding-right: 10px;
   }
 
   .input-container {
