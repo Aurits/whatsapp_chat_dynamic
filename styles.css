@@ -93,6 +93,7 @@ body {
 
 .settings-container, .profile-container{
   max-height: 100vh;
+  overflow-x: hidden;
 }
 
 .message {
