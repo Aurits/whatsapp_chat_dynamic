@@ -134,99 +134,112 @@
 
   </div>
 
-  <script>
-    const chatContainer = document.querySelector('.chat');
-    const inputGroup = document.getElementById('inputGroup');
-    const userInput = document.getElementById('userInput');
-    const radioOptions = document.getElementById('radioOptions');
-    const sendButton = document.getElementById('sendButton');
-    const submitButton = document.getElementById('submitButton');
-    const submitButtonContainer = document.getElementById('submitButtonContainer');
-    const questions = [{
-        question: "What's your favorite color?",
-        options: []
-      },
-      {
-        question: "Do you like dogs or cats?",
-        options: ['Dogs', 'Cats']
-      },
-      {
-        question: "What's your hobby?",
-        options: []
-      },
-      // Add more questions here
-    ];
-    let currentQuestionIndex = 0;
-    let allQuestionsAsked = false;
+<script>
+  const chatContainer = document.querySelector('.chat');
+  const inputGroup = document.getElementById('inputGroup');
+  const userInput = document.getElementById('userInput');
+  const radioOptions = document.getElementById('radioOptions');
+  const sendButton = document.getElementById('sendButton');
+  const submitButton = document.getElementById('submitButton');
+  const submitButtonContainer = document.getElementById('submitButtonContainer');
+  let questions = [];
+  let currentSection = 1; // Track the current section
+  let currentQuestionIndex = 0;
+  let responses = {}; // Store user responses
 
-    function showCurrentQuestion() {
-      inputGroup.style.display = 'block';
-      const currentQuestion = questions[currentQuestionIndex];
-      const questionElement = document.createElement("div");
-      questionElement.className = "message user-a";
-      questionElement.innerHTML = `
-        <p>${currentQuestion.question}</p>
-        <span class="timestamp">${new Date().toLocaleTimeString()}</span>
-      `;
-      chatContainer.appendChild(questionElement);
-
-      radioOptions.innerHTML = '';
-      if (currentQuestion.options.length > 0) {
-        for (let option of currentQuestion.options) {
-          const radioOption = document.createElement('label');
-          radioOption.innerHTML = `
-            <input type="radio" name="radioOption" value="${option}" />
-            ${option}
-          `;
-          radioOptions.appendChild(radioOption);
-        }
-      }
-
-      if (currentQuestionIndex == questions.length - 1) {
-        allQuestionsAsked = true;
-        // sendButton.style.display = 'none';
-
-        // submitButtonContainer.style.display = 'block';
-      } else {
-        sendButton.style.display = 'block';
-        submitButtonContainer.style.display = 'none';
-      }
-    }
-
-    function sendUserResponse() {
-      const userInput = document.getElementById("userInput").value;
-      const selectedOption = document.querySelector('input[name="radioOption"]:checked');
-
-      if (userInput || selectedOption) {
-        const response = userInput || selectedOption.value;
-        const responseElement = document.createElement("div");
-        responseElement.className = "message user-b";
-        responseElement.innerHTML = `
-          <p>${response}</p>
-          <span class="timestamp">${new Date().toLocaleTimeString()}</span>
-        `;
-        chatContainer.appendChild(responseElement);
-
-        currentQuestionIndex++;
-        if (currentQuestionIndex < questions.length) {
-          showCurrentQuestion();
-          document.getElementById("userInput").value = "";
-        } else {
-          // All questions have been asked
-          inputGroup.style.display = 'none';
-          sendButton.style.display = 'none';
-          submitButtonContainer.style.display = 'block';
-        }
-      }
-    }
-
-    function submitForm() {
-      console.log("Form submitted");
-    }
-
-    // Initial question display
+  async function fetchQuestions() {
+    const response = await fetch('fetch_questions.php');
+    questions = await response.json();
     showCurrentQuestion();
-  </script>
+  }
+
+  function showCurrentQuestion() {
+    inputGroup.style.display = 'block';
+    const currentQuestion = questions[currentQuestionIndex];
+    const questionElement = document.createElement("div");
+    questionElement.className = "message user-a";
+    questionElement.innerHTML = `
+      <p>${currentQuestion.question}</p>
+      <span class="timestamp">${new Date().toLocaleTimeString()}</span>
+    `;
+    chatContainer.appendChild(questionElement);
+
+    radioOptions.innerHTML = '';
+    if (currentQuestion.options.length > 0) {
+      for (let option of currentQuestion.options) {
+        const radioOption = document.createElement('label');
+        radioOption.innerHTML = `
+          <input type="radio" name="radioOption" value="${option}" />
+          ${option}
+        `;
+        radioOptions.appendChild(radioOption);
+      }
+    }
+
+    if (currentQuestionIndex == questions.length - 1) {
+      sendButton.style.display = 'none';
+      submitButtonContainer.style.display = 'block';
+    } else {
+      sendButton.style.display = 'block';
+      submitButtonContainer.style.display = 'none';
+    }
+  }
+
+const userResponses = [];
+
+function sendUserResponse() {
+  const userInput = document.getElementById("userInput").value;
+  const selectedOption = document.querySelector('input[name="radioOption"]:checked');
+
+  if (userInput || selectedOption) {
+    const response = userInput || selectedOption.value;
+    
+    // Store the response in the userResponses array for the current section
+    userResponses[currentQuestionIndex] = response;
+
+    const responseElement = document.createElement("div");
+    responseElement.className = "message user-b";
+    responseElement.innerHTML = `
+      <p>${response}</p>
+      <span class="timestamp">${new Date().toLocaleTimeString()}</span>
+    `;
+    chatContainer.appendChild(responseElement);
+
+    currentQuestionIndex++;
+    if (currentQuestionIndex < questions.length) {
+      showCurrentQuestion();
+      document.getElementById("userInput").value = "";
+    } else {
+      // All questions have been asked
+      inputGroup.style.display = 'none';
+      sendButton.style.display = 'none';
+      submitButtonContainer.style.display = 'block';
+    }
+  }
+}
+
+function submitForm() {
+  // Send the userResponses array to the server for storage
+  fetch('save_responses.php', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(userResponses)
+  })
+  .then(response => response.json())
+  .then(data => {
+    console.log(data); // Handle response from the server if needed
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });
+}
+
+  // Initial question display
+  fetchQuestions();
+</script>
+
 </body>
 
 </html>
