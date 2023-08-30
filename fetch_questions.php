@@ -41,4 +41,3 @@ $questions = array_values($questions);
 
 header('Content-Type: application/json');
 echo json_encode($questions);
-?>
