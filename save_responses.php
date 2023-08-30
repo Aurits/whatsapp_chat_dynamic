@@ -1,23 +1,25 @@
 <?php
 
-include('config.php');
-
-
 // Get JSON data from the request body
 $data = json_decode(file_get_contents('php://input'), true);
 
-// Establish database connection (modify according to your setup)
-$db = new mysqli('localhost', 'username', 'password', 'database_name');
+include('config.php');
+error_reporting(E_ALL);  // Enable error reporting
+ini_set('display_errors', 1);  // Display errors on screen
 
-if ($db->connect_error) {
-  die("Connection failed: " . $db->connect_error);
-}
-
-foreach ($data as $sectionId => $response) {
-  // Insert response into the database
-  $sql = "INSERT INTO user_responses (section_id, response) VALUES ('$sectionId', '$response')";
-  if (!$db->query($sql)) {
-    echo "Error: " . $sql . "<br>" . $db->error;
+foreach ($data as $sectionId => $responses) {
+  foreach ($responses as $response) {
+    // Escape and sanitize user input before inserting into the database
+    $sectionId = $db->real_escape_string($sectionId);
+    $response = $db->real_escape_string($response);
+    
+    // Insert response into the database
+    $sql = "INSERT INTO UserResponse (UserID, QuestionID, OptionID, ResponseText, ResponseDate)
+            VALUES (1, $sectionId, NULL, '$response', NOW())";
+    
+    if (!$db->query($sql)) {
+      echo "Error: " . $sql . "<br>" . $db->error;
+    }
   }
 }
 

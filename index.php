@@ -39,6 +39,7 @@
               <button class="app-action-button" onclick="showProfile()">Profile</button>
             </div>
           </header>
+          <div class="chat-content">
           <div class="chat">
             <div class="">
               <p style="text-align: center;">Welcome to WeFed! Let's get started.</p>
@@ -47,6 +48,7 @@
           <div id="radioOptions" class="radio-options">
             <!-- Radio options will be dynamically added here -->
           </div>
+        </div>
         </div>
 
         <div class="input-container">
@@ -159,7 +161,7 @@
     const questionElement = document.createElement("div");
     questionElement.className = "message user-a";
     questionElement.innerHTML = `
-      <p>${currentQuestion.question}</p>
+      <p>${currentQuestion.QuestionText}</p>
       <span class="timestamp">${new Date().toLocaleTimeString()}</span>
     `;
     chatContainer.appendChild(questionElement);
@@ -177,8 +179,8 @@
     }
 
     if (currentQuestionIndex == questions.length - 1) {
-      sendButton.style.display = 'none';
-      submitButtonContainer.style.display = 'block';
+      // sendButton.style.display = 'none';
+      // submitButtonContainer.style.display = 'block';
     } else {
       sendButton.style.display = 'block';
       submitButtonContainer.style.display = 'none';

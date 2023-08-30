@@ -26,6 +26,11 @@ body {
   padding: 10px 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin: -20px -20px 10px;
+    position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2; /* Set a higher z-index value */
 }
 
 .app-title {
@@ -70,6 +75,11 @@ body {
 
   .chat-container {
     max-width: 92vw;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: white;
+  overflow: hidden;
 
   }
 
@@ -82,15 +92,33 @@ body {
 }
 
 .settings-container, .profile-container, .chat-container {
-  flex: 1;
+    display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: white;
+  overflow: hidden;
   width: 100%;
-  max-height: 86vh;
+  
   padding: 20px;
   background-color: white;
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  overflow-y: auto;
+  
   margin-bottom: 20px;
+}
+
+/* Adjust the padding of the .chat-content to account for the fixed header */
+.chat-content {
+  flex: 1;
+  overflow-y: auto;
+  padding-top: 60px; /* Adjust as needed */
+}
+
+/* Adjust the max-height for the .chat-container and other containers */
+.settings-container,
+.profile-container,
+.chat-container {
+  max-height: calc(100vh - 60px); /* Subtract the height of the fixed header */
 }
 
 .settings-container, .profile-container{
