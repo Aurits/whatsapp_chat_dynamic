@@ -230,23 +230,43 @@
       }
     }
 
-    function submitForm() {
-      // Send the userResponses array to the server for storage
-      fetch('save_responses.php', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(userResponses)
-        })
-        .then(response => response.json())
-        .then(data => {
-          console.log(data); // Handle response from the server if needed
-        })
-        .catch(error => {
-          console.error('Error:', error);
-        });
+
+function flattenArray(inputArray) {
+  const flatArray = [];
+  for (const value of inputArray) {
+    if (Array.isArray(value)) {
+      flatArray.push(...flattenArray(value));
+    } else {
+      flatArray.push(value);
     }
+  }
+  return flatArray;
+}
+
+function submitForm() {
+  // Flatten the userResponses array
+  const flatUserResponses = flattenArray(userResponses);
+
+  // Send the flattened array to the server for storage
+  fetch('save_responses.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(flatUserResponses)
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.error) {
+        console.error('Error:', data.error);
+      } else {
+        console.log(data); // Handle success
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+}
 
     // Initial question display
     fetchQuestions();
