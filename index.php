@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="styles.css">
-  <title>Chatbot Application</title>
+  <title>FeedBack Chatbot Application</title>
   <style>
   </style>
 
@@ -34,7 +34,7 @@
     <div class="chat-container">
       <header class="app-header" style="position: fixed; top: 20px; right: 20px; left: 20px; min-width: initial; border-top-right-radius:10px; border-top-left-radius: 10px; margin-bottom: 10px">
         <a href="index.php" style="text-decoration: none; color: white">
-          <h1 class="app-title">WeFed</h1>
+          <h1 class="app-title">SurveyMe</h1>
         </a>
         <div class="app-actions">
           <button class="app-action-button" onclick="showSettings()">Settings</button>
@@ -43,10 +43,14 @@
       </header>
       <div class="chat-content">
         <div class="chat">
-          <div class="" style="margin-top: 40px">
-            <p style="text-align: center;">Welcome to WeFed! Let's get started.</p>
-          </div>
-        </div>
+            <div class="chat">
+                <div style="text-align: center; margin-top: 40px;">
+                    <h1>Welcome to SurveyMe!</h1>
+                    <p>Help us improve by answering a few quick questions.</p>
+                    <p>Your feedback is confidential and valuable to us.</p>
+                    <p>Let's get started!</p>
+                </div>
+            </div>
         <div id="radioOptions" class="radio-options">
           <!-- Radio options will be dynamically added here -->
         </div>
@@ -186,6 +190,9 @@
         `;
         radioOptions.appendChild(radioOption);
       }
+
+      inputGroup.style.display = 'none';
+      // sendButton.style.display = 'none';
     }
 
     if (currentQuestionIndex == questions.length - 1) {
@@ -247,6 +254,16 @@
     }
   }
 }
+
+
+ const radioOptionsContainer = document.getElementById('radioOptions');
+  radioOptionsContainer.addEventListener('change', function (event) {
+      const selectedOption = event.target;
+      if (selectedOption.type === 'radio' && selectedOption.checked) {
+          // User has selected an option, send the response
+          sendUserResponse();
+      }
+  });
 
 
   function flattenArray(inputArray) {
