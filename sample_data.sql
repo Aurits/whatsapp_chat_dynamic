@@ -1,3 +1,4 @@
+--MAKE SURE TO ADD A USER TO THE DB FIRST IN THE SAMPLES
 -- Insert a sample survey into the database
 INSERT INTO Survey (Title, Description)
 VALUES
