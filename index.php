@@ -42,15 +42,22 @@
         </div>
       </header>
       <div class="chat-content">
+        <div class="chatheader">
+          <div class="" style="margin-top: 40px; text-align: center;">
+             <h3>Welcome to SurveyMe!</h3>
+              <p style="color: #075e54">Help us improve by answering a few quick questions.</p>
+              <p style="color: #075e54">Your feedback is confidential and valuable to us.</p>
+              <p>Let's get started!</p>
+          </div>
+        </div>
         <div class="chat">
-            <div class="chat">
-                <div style="text-align: center; margin-top: 40px;">
-                    <h1>Welcome to SurveyMe!</h1>
-                    <p>Help us improve by answering a few quick questions.</p>
-                    <p>Your feedback is confidential and valuable to us.</p>
-                    <p>Let's get started!</p>
-                </div>
-            </div>
+
+
+          <!-- This is where the magic happens -->
+          
+
+
+        </div>
         <div id="radioOptions" class="radio-options">
           <!-- Radio options will be dynamically added here -->
         </div>
@@ -206,7 +213,7 @@
 
   const userResponses = [];
 
-  function sendUserResponse() {
+function sendUserResponse() {
   const userInput = document.getElementById("userInput").value;
   const selectedOption = document.querySelector('input[name="radioOption"]:checked');
 
@@ -243,7 +250,12 @@
     chatContainer.appendChild(responseElement);
 
     currentQuestionIndex++;
+
     if (currentQuestionIndex < questions.length) {
+      if (currentQuestionIndex % 2 === 0) {
+        // Clear the chat container after every two questions
+        clearChatContainer();
+      }
       showCurrentQuestion();
       document.getElementById("userInput").value = "";
     } else {
@@ -256,6 +268,7 @@
 }
 
 
+
  const radioOptionsContainer = document.getElementById('radioOptions');
   radioOptionsContainer.addEventListener('change', function (event) {
       const selectedOption = event.target;
@@ -264,6 +277,14 @@
           sendUserResponse();
       }
   });
+
+
+  // Function to clear the chat container
+function clearChatContainer() {
+  chatContainer.innerHTML = ''; // This will remove all child elements from the chat container
+}
+
+
 
 
   function flattenArray(inputArray) {
