@@ -1,100 +1,62 @@
--- Admin Table
-INSERT INTO Admin (AdminID, Username, Password)
+-- Insert a sample survey into the database
+INSERT INTO Survey (Title, Description)
 VALUES
-    (1, 'admin1', 'password1'),
-    (2, 'admin2', 'password2'),
-    (3, 'admin3', 'password3'),
-    (4, 'admin4', 'password4'),
-    (5, 'admin5', 'password5');
+    ('Love and Relationships Survey', 'A survey about the complexities of love and relationships.');
 
--- Survey Table
-INSERT INTO Survey (SurveyID, Title, Description)
+-- Insert sections for the survey
+INSERT INTO Section (SurveyID, Title)
 VALUES
-    (1, 'Employee Satisfaction Survey', 'Gather feedback from employees about their work experience.'),
-    (2, 'Customer Feedback Survey', 'Collect customer opinions about our products and services.'),
-    (3, 'Product Improvement Survey', 'Seek input on how we can enhance our existing products.'),
-    (4, 'Training Effectiveness Survey', 'Evaluate the effectiveness of training programs.'),
-    (5, 'Event Experience Survey', 'Gauge participant satisfaction after an event.');
+    (1, 'Love and Emotions'),
+    (1, 'Relationship Challenges'),
+    (1, 'Communication in Love');
 
--- AdminSurvey Table
-INSERT INTO AdminSurvey (AdminSurveyID, AdminID, SurveyID)
+-- Insert questions for each section with a mix of text feedback and multiple-choice options
+-- Section: Love and Emotions
+INSERT INTO Question (SectionID, QuestionText, IsMultipleChoice)
 VALUES
-    (1, 1, 1),
-    (2, 2, 2),
-    (3, 1, 3),
-    (4, 3, 4),
-    (5, 4, 5);
+    (1, 'How would you describe the feeling of being in love?', FALSE),
+    (1, 'Have you ever experienced conflicting emotions in a relationship? If so, please describe.', FALSE),
+    (1, 'On a scale of 1 to 5, how intense is your love for your partner?', TRUE);
 
--- Section Table
-INSERT INTO Section (SectionID, SurveyID, Title)
+-- Insert options for the multiple-choice question
+-- Question: How intense is your love for your partner?
+INSERT INTO Option (QuestionID, OptionText)
 VALUES
-    (1, 1, 'Work Environment'),
-    (2, 1, 'Communication'),
-    (3, 2, 'Product Satisfaction'),
-    (4, 3, 'Product Features'),
-    (5, 4, 'Content Quality');
+    (3, '1 - Not intense at all'),
+    (3, '2 - Slightly intense'),
+    (3, '3 - Moderately intense'),
+    (3, '4 - Very intense'),
+    (3, '5 - Extremely intense');
 
--- Question Table
-INSERT INTO Question (QuestionID, SectionID, QuestionText, IsMultipleChoice)
+-- Section: Relationship Challenges
+INSERT INTO Question (SectionID, QuestionText, IsMultipleChoice)
 VALUES
-    (1, 1, 'How satisfied are you with the office environment?', TRUE),
-    (2, 1, 'Are you comfortable with the available facilities?', TRUE),
-    (3, 2, 'Do you feel well-informed about company updates?', TRUE),
-    (4, 2, 'Do you have a clear understanding of your tasks?', TRUE),
-    (5, 3, 'Rate your satisfaction with the product quality.', TRUE),
-    (6, 3, 'Rate your satisfaction with the product pricing.', TRUE),
-    (7, 4, 'What features would you like to see in the product?', FALSE),
-    (8, 4, 'What improvements can be made to the user interface?', FALSE),
-    (9, 5, 'How engaging was the event content?', TRUE),
-    (10, 5, 'Did you find the event\'s schedule convenient?', TRUE);
+    (2, 'What do you consider the biggest challenge in your current relationship?', FALSE),
+    (2, 'How do you usually resolve conflicts with your partner?', FALSE),
+    (2, 'On a scale of 1 to 5, how challenging is maintaining trust in your relationship?', TRUE);
 
--- Option Table
-INSERT INTO Option (OptionID, QuestionID, OptionText)
+-- Insert options for the multiple-choice question
+-- Question: How challenging is maintaining trust in your relationship?
+INSERT INTO Option (QuestionID, OptionText)
 VALUES
-    (1, 1, 'Very Satisfied'),
-    (2, 1, 'Satisfied'),
-    (3, 1, 'Neutral'),
-    (4, 1, 'Unsatisfied'),
-    (5, 1, 'Very Unsatisfied'),
-    (6, 2, 'Yes'),
-    (7, 2, 'No'),
-    (8, 3, 'Very Well-Informed'),
-    (9, 3, 'Moderately Informed'),
-    (10, 3, 'Not Well-Informed'),
-    (11, 4, 'Clear Understanding'),
-    (12, 4, 'Somewhat Clear'),
-    (13, 4, 'Not Clear'),
-    (14, 5, 'Very Satisfied'),
-    (15, 5, 'Satisfied'),
-    (16, 5, 'Neutral'),
-    (17, 5, 'Unsatisfied'),
-    (18, 5, 'Very Unsatisfied'),
-    (19, 6, 'Very Satisfied'),
-    (20, 6, 'Satisfied'),
-    (21, 6, 'Neutral'),
-    (22, 6, 'Unsatisfied'),
-    (23, 6, 'Very Unsatisfied');
+    (6, '1 - Not challenging at all'),
+    (6, '2 - Slightly challenging'),
+    (6, '3 - Moderately challenging'),
+    (6, '4 - Very challenging'),
+    (6, '5 - Extremely challenging');
 
--- User Table
-INSERT INTO User (UserID, Username, Password)
+-- Section: Communication in Love
+INSERT INTO Question (SectionID, QuestionText, IsMultipleChoice)
 VALUES
-    (1, 'user1', 'password1'),
-    (2, 'user2', 'password2'),
-    (3, 'user3', 'password3'),
-    (4, 'user4', 'password4'),
-    (5, 'user5', 'password5');
+    (3, 'Do you feel comfortable expressing your feelings to your partner?', FALSE),
+    (3, 'How important is effective communication in a relationship?', TRUE);
 
--- UserResponse Table
-INSERT INTO UserResponse (UserResponseID, UserID, QuestionID, OptionID, ResponseText, ResponseDate)
+-- Insert options for the multiple-choice question
+-- Question: How important is effective communication in a relationship?
+INSERT INTO Option (QuestionID, OptionText)
 VALUES
-    (1, 1, 1, 1, NULL, '2023-08-01 10:00:00'),
-    (2, 2, 1, 2, NULL, '2023-08-01 11:00:00'),
-    (3, 3, 1, 3, NULL, '2023-08-01 12:00:00'),
-    (4, 4, 1, 4, NULL, '2023-08-01 13:00:00'),
-    (5, 5, 1, 5, NULL, '2023-08-01 14:00:00'),
-    -- ... repeat for other questions and sections ...
-    (26, 1, 10, NULL, 'The schedule was convenient for me.', '2023-08-03 10:00:00'),
-    (27, 2, 10, NULL, 'The event content was engaging and informative.', '2023-08-03 11:00:00'),
-    (28, 3, 10, NULL, 'I enjoyed the event but had some schedule conflicts.', '2023-08-03 12:00:00'),
-    (29, 4, 10, NULL, 'I found the event useful, but the content could have been more detailed.', '2023-08-03 13:00:00'),
-    (30, 5, 10, NULL, 'The event provided valuable insights, and I appreciate the effort.', '2023-08-03 14:00:00');
+    (8, '1 - Not important at all'),
+    (8, '2 - Slightly important'),
+    (8, '3 - Moderately important'),
+    (8, '4 - Very important'),
+    (8, '5 - Extremely important');

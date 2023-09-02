@@ -1,61 +1,61 @@
--- Create Admin table
+-- Admin Table
 CREATE TABLE Admin (
-    AdminID INT PRIMARY KEY,
+    AdminID INT AUTO_INCREMENT PRIMARY KEY,
     Username VARCHAR(255),
     Password VARCHAR(255)
 );
 
--- Create Survey table
+-- Survey Table
 CREATE TABLE Survey (
-    SurveyID INT PRIMARY KEY,
+    SurveyID INT AUTO_INCREMENT PRIMARY KEY,
     Title VARCHAR(255),
     Description TEXT
 );
 
--- Create AdminSurvey table
+-- AdminSurvey Table
 CREATE TABLE AdminSurvey (
-    AdminSurveyID INT PRIMARY KEY,
+    AdminSurveyID INT AUTO_INCREMENT PRIMARY KEY,
     AdminID INT,
     SurveyID INT,
     FOREIGN KEY (AdminID) REFERENCES Admin(AdminID),
     FOREIGN KEY (SurveyID) REFERENCES Survey(SurveyID)
 );
 
--- Create Section table
+-- Section Table
 CREATE TABLE Section (
-    SectionID INT PRIMARY KEY,
+    SectionID INT AUTO_INCREMENT PRIMARY KEY,
     SurveyID INT,
     Title VARCHAR(255),
     FOREIGN KEY (SurveyID) REFERENCES Survey(SurveyID)
 );
 
--- Create Question table
+-- Question Table
 CREATE TABLE Question (
-    QuestionID INT PRIMARY KEY,
+    QuestionID INT AUTO_INCREMENT PRIMARY KEY,
     SectionID INT,
     QuestionText TEXT,
     IsMultipleChoice BOOLEAN,
     FOREIGN KEY (SectionID) REFERENCES Section(SectionID)
 );
 
--- Create Option table
+-- Option Table
 CREATE TABLE Option (
-    OptionID INT PRIMARY KEY,
+    OptionID INT AUTO_INCREMENT PRIMARY KEY,
     QuestionID INT,
-    OptionText VARCHAR(255),
+    OptionText TEXT,
     FOREIGN KEY (QuestionID) REFERENCES Question(QuestionID)
 );
 
--- Create User table
+-- User Table
 CREATE TABLE User (
-    UserID INT PRIMARY KEY,
+    UserID INT AUTO_INCREMENT PRIMARY KEY,
     Username VARCHAR(255),
     Password VARCHAR(255)
 );
 
--- Create UserResponse table
+-- UserResponse Table
 CREATE TABLE UserResponse (
-    UserResponseID INT PRIMARY KEY,
+    UserResponseID INT AUTO_INCREMENT PRIMARY KEY,
     UserID INT,
     QuestionID INT,
     OptionID INT,
