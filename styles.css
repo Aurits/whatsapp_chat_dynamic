@@ -97,8 +97,10 @@ body {
 }
 
 .settings-container,
+.thankyou-container,
 .profile-container {
   max-height: 100vh;
+  overflow-y: hidden;
 }
 
 .message {

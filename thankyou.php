@@ -35,7 +35,7 @@
 <body>
   <div class="container">
 
-    <div class="chat-container">
+    <div class="thankyou-container">
       <header class="app-header" style="position: fixed; top: 20px; right: 20px; left: 20px; min-width: initial; border-top-right-radius:10px; border-top-left-radius: 10px; margin-bottom: 10px">
         <a href="index.php" style="text-decoration: none; color: white">
           <h1 class="app-title">SurveyMe</h1>
