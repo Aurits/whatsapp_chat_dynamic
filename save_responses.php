@@ -6,22 +6,22 @@ include('config.php');
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-// Define the UserID, QuestionID, and OptionID for the responses
+// Define the UserID for the responses (you can get it from your session)
 $userId = 1;
-$questionId = 1;
-$optionId = 1;
 
 foreach ($data as $response) {
-  // Escape and sanitize user input before inserting into the database
-  $escapedResponse = $db->real_escape_string($response);
+    // Extract data from the response
+    $questionId = $response['QuestionID'];
+    $optionId = isset($response['OptionID']) ? $response['OptionID'] : 'NULL';
+    $responseText = $db->real_escape_string($response['ResponseText']);
 
-  // Insert response into the database
-  $sql = "INSERT INTO UserResponse (UserID, QuestionID, OptionID, ResponseText, ResponseDate)
-          VALUES ($userId, $questionId, $optionId, '$escapedResponse', NOW())";
+    // Insert response into the database
+    $sql = "INSERT INTO UserResponse (UserID, QuestionID, OptionID, ResponseText, ResponseDate)
+            VALUES ($userId, $questionId, $optionId, '$responseText', NOW())";
 
-  if (!$db->query($sql)) {
-    echo "Error: " . $sql . "<br>" . $db->error;
-  }
+    if (!$db->query($sql)) {
+        echo "Error: " . $sql . "<br>" . $db->error;
+    }
 }
 
 $db->close();

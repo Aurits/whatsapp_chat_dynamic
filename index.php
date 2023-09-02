@@ -146,131 +146,154 @@
 
   </div>
 
-  <script>
-    const chatContainer = document.querySelector('.chat');
-    const inputGroup = document.getElementById('inputGroup');
-    const userInput = document.getElementById('userInput');
-    const radioOptions = document.getElementById('radioOptions');
-    const sendButton = document.getElementById('sendButton');
-    const submitButton = document.getElementById('submitButton');
-    const submitButtonContainer = document.getElementById('submitButtonContainer');
-    let questions = [];
-    let currentSection = 1; // Track the current section
-    let currentQuestionIndex = 0;
-    let responses = {}; // Store user responses
+<script>
+  const chatContainer = document.querySelector('.chat');
+  const inputGroup = document.getElementById('inputGroup');
+  const userInput = document.getElementById('userInput');
+  const radioOptions = document.getElementById('radioOptions');
+  const sendButton = document.getElementById('sendButton');
+  const submitButton = document.getElementById('submitButton');
+  const submitButtonContainer = document.getElementById('submitButtonContainer');
+  let questions = [];
+  let currentSection = 1; // Track the current section
+  let currentQuestionIndex = 0;
+  let responses = {}; // Store user responses
 
-    async function fetchQuestions() {
-      const response = await fetch('fetch_questions.php');
-      questions = await response.json();
-      showCurrentQuestion();
-    }
+  async function fetchQuestions() {
+    const response = await fetch('fetch_questions.php');
+    questions = await response.json();
+    showCurrentQuestion();
+  }
 
-    function showCurrentQuestion() {
-      inputGroup.style.display = 'block';
-      const currentQuestion = questions[currentQuestionIndex];
-      const questionElement = document.createElement("div");
-      questionElement.className = "message user-a";
-      questionElement.innerHTML = `
+  function showCurrentQuestion() {
+    inputGroup.style.display = 'block';
+    const currentQuestion = questions[currentQuestionIndex];
+    const questionElement = document.createElement("div");
+    questionElement.className = "message user-a";
+    questionElement.innerHTML = `
       <p>${currentQuestion.QuestionText}</p>
       <span class="timestamp">${new Date().toLocaleTimeString()}</span>
     `;
-      chatContainer.appendChild(questionElement);
+    chatContainer.appendChild(questionElement);
 
-      radioOptions.innerHTML = '';
-      if (currentQuestion.options.length > 0) {
-        for (let option of currentQuestion.options) {
-          const radioOption = document.createElement('label');
-          radioOption.innerHTML = `
-          <input type="radio" name="radioOption" value="${option}" />
-          ${option}
+    radioOptions.innerHTML = '';
+    if (currentQuestion.options.length > 0) {
+      for (let option of currentQuestion.options) {
+        const radioOption = document.createElement('label');
+        radioOption.innerHTML = `
+          <input type="radio" name="radioOption" value="${option.OptionText}" />
+          ${option.OptionText}
         `;
-          radioOptions.appendChild(radioOption);
-        }
-      }
-
-      if (currentQuestionIndex == questions.length - 1) {
-        // sendButton.style.display = 'none';
-        // submitButtonContainer.style.display = 'block';
-      } else {
-        sendButton.style.display = 'block';
-        submitButtonContainer.style.display = 'none';
+        radioOptions.appendChild(radioOption);
       }
     }
 
-    const userResponses = [];
+    if (currentQuestionIndex == questions.length - 1) {
+      // sendButton.style.display = 'none';
+      // submitButtonContainer.style.display = 'block';
+    } else {
+      sendButton.style.display = 'block';
+      submitButtonContainer.style.display = 'none';
+    }
+  }
 
-    function sendUserResponse() {
-      const userInput = document.getElementById("userInput").value;
-      const selectedOption = document.querySelector('input[name="radioOption"]:checked');
+  const userResponses = [];
 
-      if (userInput || selectedOption) {
-        const response = userInput || selectedOption.value;
+  function sendUserResponse() {
+  const userInput = document.getElementById("userInput").value;
+  const selectedOption = document.querySelector('input[name="radioOption"]:checked');
 
-        // Store the response in the userResponses array for the current section
-        userResponses[currentQuestionIndex] = response;
+  if (userInput || selectedOption) {
+    const response = userInput || selectedOption.value;
+    const questionId = questions[currentQuestionIndex].QuestionID; // Get the QuestionID
 
-        const responseElement = document.createElement("div");
-        responseElement.className = "message user-b";
-        responseElement.innerHTML = `
+    // Find the OptionID based on the selected option text
+    let optionId = null;
+    if (selectedOption) {
+      const selectedOptionText = selectedOption.value;
+      const options = questions[currentQuestionIndex].options;
+      for (let i = 0; i < options.length; i++) {
+        if (options[i].OptionText === selectedOptionText) {
+          optionId = options[i].OptionID;
+          break;
+        }
+      }
+    }
+
+    // Store the response, QuestionID, and OptionID in the userResponses array
+    userResponses[currentQuestionIndex] = {
+      ResponseText: response,
+      QuestionID: questionId,
+      OptionID: optionId
+    };
+
+    const responseElement = document.createElement("div");
+    responseElement.className = "message user-b";
+    responseElement.innerHTML = `
       <p>${response}</p>
       <span class="timestamp">${new Date().toLocaleTimeString()}</span>
     `;
-        chatContainer.appendChild(responseElement);
+    chatContainer.appendChild(responseElement);
 
-        currentQuestionIndex++;
-        if (currentQuestionIndex < questions.length) {
-          showCurrentQuestion();
-          document.getElementById("userInput").value = "";
-        } else {
-          // All questions have been asked
-          inputGroup.style.display = 'none';
-          sendButton.style.display = 'none';
-          submitButtonContainer.style.display = 'block';
-        }
-      }
-    }
-
-
-function flattenArray(inputArray) {
-  const flatArray = [];
-  for (const value of inputArray) {
-    if (Array.isArray(value)) {
-      flatArray.push(...flattenArray(value));
+    currentQuestionIndex++;
+    if (currentQuestionIndex < questions.length) {
+      showCurrentQuestion();
+      document.getElementById("userInput").value = "";
     } else {
-      flatArray.push(value);
+      // All questions have been asked
+      inputGroup.style.display = 'none';
+      sendButton.style.display = 'none';
+      submitButtonContainer.style.display = 'block';
     }
   }
-  return flatArray;
 }
 
-function submitForm() {
-  // Flatten the userResponses array
-  const flatUserResponses = flattenArray(userResponses);
 
-  // Send the flattened array to the server for storage
-  fetch('save_responses.php', {
+  function flattenArray(inputArray) {
+    const flatArray = [];
+    for (const value of inputArray) {
+      if (Array.isArray(value)) {
+        flatArray.push(...flattenArray(value));
+      } else {
+        flatArray.push(value);
+      }
+    }
+    return flatArray;
+  }
+
+  function submitForm() {
+    // Flatten the userResponses array
+    const flatUserResponses = flattenArray(userResponses);
+
+    // Log the flattened array to the browser console
+    console.log(flatUserResponses);
+
+    // Send the flattened array to the server for storage
+    fetch('save_responses.php', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(flatUserResponses)
     })
-    .then(response => response.json())
-    .then(data => {
-      if (data.error) {
-        console.error('Error:', data.error);
-      } else {
-        console.log(data); // Handle success
-      }
-    })
-    .catch(error => {
-      console.error('Error:', error);
-    });
-}
+      .then(response => response.json())
+      .then(data => {
+        if (data.error) {
+          console.error('Error:', data.error);
+        } else {
+          console.log(data); // Handle success
+          window.location.href='./';
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  }
 
-    // Initial question display
-    fetchQuestions();
-  </script>
+  // Initial question display
+  fetchQuestions();
+</script>
+
 
 </body>
 
