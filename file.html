@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="styles.css" />
-    <title>Chatbot Application</title>
+    <title>FeedBack Chatbot Application</title>
     <style></style>
 
     <script>
@@ -29,10 +29,22 @@
   <body>
     <div class="container">
       <div class="chat-container">
-        <header class="app-header">
-          <a href="index.html" style="text-decoration: none; color: white"
-            ><h1 class="app-title">WeFed</h1></a
-          >
+        <header
+          class="app-header"
+          style="
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            left: 20px;
+            min-width: initial;
+            border-top-right-radius: 10px;
+            border-top-left-radius: 10px;
+            margin-bottom: 10px;
+          "
+        >
+          <a href="index.php" style="text-decoration: none; color: white">
+            <h1 class="app-title">SurveyMe</h1>
+          </a>
           <div class="app-actions">
             <button class="app-action-button" onclick="showSettings()">
               Settings
@@ -42,15 +54,25 @@
             </button>
           </div>
         </header>
-        <div class="chat">
-          <div class="">
-            <p style="text-align: center">
-              Welcome to WeFed! Let's get started.
-            </p>
+        <div class="chat-content">
+          <div class="chatheader">
+            <div class="" style="margin-top: 40px; text-align: center">
+              <h3>Welcome to SurveyMe!</h3>
+              <p style="color: #075e54">
+                Help us improve by answering a few quick questions.
+              </p>
+              <p style="color: #075e54">
+                Your feedback is confidential and valuable to us.
+              </p>
+              <p>Let's get started!</p>
+            </div>
           </div>
-        </div>
-        <div id="radioOptions" class="radio-options">
-          <!-- Radio options will be dynamically added here -->
+          <div class="chat">
+            <!-- This is where the magic happens -->
+          </div>
+          <div id="radioOptions" class="radio-options">
+            <!-- Radio options will be dynamically added here -->
+          </div>
         </div>
       </div>
 
@@ -92,10 +114,22 @@
 
       <!-- Settings page -->
       <div class="settings-container" style="display: none">
-        <header class="app-header">
-          <a href="index.html" style="text-decoration: none; color: white"
-            ><h1 class="app-title">WeFed</h1></a
-          >
+        <header
+          class="app-header"
+          style="
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            left: 20px;
+            min-width: initial;
+            border-top-right-radius: 10px;
+            border-top-left-radius: 10px;
+            margin-bottom: 10px;
+          "
+        >
+          <a href="index.php" style="text-decoration: none; color: white">
+            <h1 class="app-title">WeFed</h1>
+          </a>
           <div class="app-actions">
             <button class="app-action-button" onclick="showSettings()">
               Settings
@@ -105,10 +139,12 @@
             </button>
           </div>
         </header>
+        <br />
+        <br />
         <!-- Settings content -->
         <h2 class="page-title">Settings</h2>
         <p class="page-description">
-          Welcome to the Settings page, where you can customize your app
+          Welcome to the Settings page,<br />where you can customize your app
           experience.
         </p>
         <div class="section">
@@ -144,10 +180,22 @@
 
       <!-- Profile page -->
       <div class="profile-container" style="display: none">
-        <header class="app-header">
-          <a href="index.html" style="text-decoration: none; color: white"
-            ><h1 class="app-title">WeFed</h1></a
-          >
+        <header
+          class="app-header"
+          style="
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            left: 20px;
+            min-width: initial;
+            border-top-right-radius: 10px;
+            border-top-left-radius: 10px;
+            margin-bottom: 10px;
+          "
+        >
+          <a href="index.php" style="text-decoration: none; color: white">
+            <h1 class="app-title">WeFed</h1>
+          </a>
           <div class="app-actions">
             <button class="app-action-button" onclick="showSettings()">
               Settings
@@ -157,6 +205,8 @@
             </button>
           </div>
         </header>
+        <br />
+        <br />
         <!-- Profile content -->
         <h2 class="page-title">Your Profile</h2>
         <p class="page-description">
@@ -228,23 +278,16 @@ Exploring the world one code at a time.</textarea
       const submitButtonContainer = document.getElementById(
         "submitButtonContainer"
       );
-      const questions = [
-        {
-          question: "What's your favorite color?",
-          options: [],
-        },
-        {
-          question: "Do you like dogs or cats?",
-          options: ["Dogs", "Cats"],
-        },
-        {
-          question: "What's your hobby?",
-          options: [],
-        },
-        // Add more questions here
-      ];
+      let questions = [];
+      let currentSection = 1; // Track the current section
       let currentQuestionIndex = 0;
-      let allQuestionsAsked = false;
+      let responses = {}; // Store user responses
+
+      async function fetchQuestions() {
+        const response = await fetch("fetch_questions.php");
+        questions = await response.json();
+        showCurrentQuestion();
+      }
 
       function showCurrentQuestion() {
         inputGroup.style.display = "block";
@@ -252,9 +295,9 @@ Exploring the world one code at a time.</textarea
         const questionElement = document.createElement("div");
         questionElement.className = "message user-a";
         questionElement.innerHTML = `
-        <p>${currentQuestion.question}</p>
-       
-      `;
+      <p>${currentQuestion.QuestionText}</p>
+      <span class="timestamp">${new Date().toLocaleTimeString()}</span>
+    `;
         chatContainer.appendChild(questionElement);
 
         radioOptions.innerHTML = "";
@@ -262,23 +305,26 @@ Exploring the world one code at a time.</textarea
           for (let option of currentQuestion.options) {
             const radioOption = document.createElement("label");
             radioOption.innerHTML = `
-            <input type="radio" name="radioOption" value="${option}" />
-            ${option}
-          `;
+          <input type="radio" name="radioOption" value="${option.OptionText}" />
+          ${option.OptionText}
+        `;
             radioOptions.appendChild(radioOption);
           }
+
+          inputGroup.style.display = "none";
+          // sendButton.style.display = 'none';
         }
 
         if (currentQuestionIndex == questions.length - 1) {
-          allQuestionsAsked = true;
           // sendButton.style.display = 'none';
-
           // submitButtonContainer.style.display = 'block';
         } else {
           sendButton.style.display = "block";
           submitButtonContainer.style.display = "none";
         }
       }
+
+      const userResponses = [];
 
       function sendUserResponse() {
         const userInput = document.getElementById("userInput").value;
@@ -288,16 +334,43 @@ Exploring the world one code at a time.</textarea
 
         if (userInput || selectedOption) {
           const response = userInput || selectedOption.value;
+          const questionId = questions[currentQuestionIndex].QuestionID; // Get the QuestionID
+
+          // Find the OptionID based on the selected option text
+          let optionId = null;
+          if (selectedOption) {
+            const selectedOptionText = selectedOption.value;
+            const options = questions[currentQuestionIndex].options;
+            for (let i = 0; i < options.length; i++) {
+              if (options[i].OptionText === selectedOptionText) {
+                optionId = options[i].OptionID;
+                break;
+              }
+            }
+          }
+
+          // Store the response, QuestionID, and OptionID in the userResponses array
+          userResponses[currentQuestionIndex] = {
+            ResponseText: response,
+            QuestionID: questionId,
+            OptionID: optionId,
+          };
+
           const responseElement = document.createElement("div");
           responseElement.className = "message user-b";
           responseElement.innerHTML = `
-          <p>${response}</p>
-          <span class="timestamp">${new Date().toLocaleTimeString()}</span>
-        `;
+      <p>${response}</p>
+      <span class="timestamp">${new Date().toLocaleTimeString()}</span>
+    `;
           chatContainer.appendChild(responseElement);
 
           currentQuestionIndex++;
+
           if (currentQuestionIndex < questions.length) {
+            if (currentQuestionIndex % 2 === 0) {
+              // Clear the chat container after every two questions
+              clearChatContainer();
+            }
             showCurrentQuestion();
             document.getElementById("userInput").value = "";
           } else {
@@ -309,12 +382,63 @@ Exploring the world one code at a time.</textarea
         }
       }
 
+      const radioOptionsContainer = document.getElementById("radioOptions");
+      radioOptionsContainer.addEventListener("change", function (event) {
+        const selectedOption = event.target;
+        if (selectedOption.type === "radio" && selectedOption.checked) {
+          // User has selected an option, send the response
+          sendUserResponse();
+        }
+      });
+
+      // Function to clear the chat container
+      function clearChatContainer() {
+        chatContainer.innerHTML = ""; // This will remove all child elements from the chat container
+      }
+
+      function flattenArray(inputArray) {
+        const flatArray = [];
+        for (const value of inputArray) {
+          if (Array.isArray(value)) {
+            flatArray.push(...flattenArray(value));
+          } else {
+            flatArray.push(value);
+          }
+        }
+        return flatArray;
+      }
+
       function submitForm() {
-        console.log("Form submitted");
+        // Flatten the userResponses array
+        const flatUserResponses = flattenArray(userResponses);
+
+        // Log the flattened array to the browser console
+        console.log(flatUserResponses);
+
+        // Send the flattened array to the server for storage
+        fetch("save_responses.php", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(flatUserResponses),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.error) {
+              console.error("Error:", data.error);
+            } else {
+              console.log(data); // Handle success
+              window.location.href = "./";
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
       }
 
       // Initial question display
-      showCurrentQuestion();
+      fetchQuestions();
     </script>
   </body>
 </html>

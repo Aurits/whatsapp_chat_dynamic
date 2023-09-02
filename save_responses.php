@@ -30,4 +30,3 @@ $db->close();
 $response = ['message' => 'Responses saved successfully'];
 header('Content-Type: application/json'); // Set the Content-Type header to JSON
 echo json_encode($response); // Encode the response array as JSON and echo it
-?>
