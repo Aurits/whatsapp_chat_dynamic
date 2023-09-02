@@ -252,7 +252,7 @@ function sendUserResponse() {
     currentQuestionIndex++;
 
     if (currentQuestionIndex < questions.length) {
-      if (currentQuestionIndex % 2 === 0) {
+      if (currentQuestionIndex % 3 === 0) {
         // Clear the chat container after every two questions
         clearChatContainer();
       }
@@ -320,7 +320,7 @@ function clearChatContainer() {
           console.error('Error:', data.error);
         } else {
           console.log(data); // Handle success
-          window.location.href='./';
+          window.location.href='./thankyou.php';
         }
       })
       .catch(error => {
